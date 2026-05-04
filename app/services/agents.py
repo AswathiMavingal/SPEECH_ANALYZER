@@ -1,11 +1,16 @@
 from crewai import LLM, Agent
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 
 class AgentFactory:
     def __init__(self):
         self.llm = LLM(
-            model="ollama/llama3",
-            base_url="http://localhost:11434",
+            model=os.getenv("MODEL"),  #"ollama/llama3",
+            base_url=os.getenv("OLLAMA_URL"), #"http://localhost:11434",
             temperature=0.0,
             top_p=0.1,
         )
