@@ -17,4 +17,7 @@ jobs:
           pip install pytest
 
       - name: Run tests
+        env:
+          MODEL: "ollama/llama3"
+          OLLAMA_URL: "http://localhost:11434"
         run: pytest
