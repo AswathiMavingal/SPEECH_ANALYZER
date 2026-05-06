@@ -3,6 +3,8 @@ name: CI-CD DockerHub
 on:
   push:
     branches: [main]
+  pull_request:  # Add this to trigger checks on PRs
+    branches: [main]
 
 jobs:
   build-test-deploy:
@@ -29,6 +31,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/textmoderator-api:latest .
 
-      # 📦 Push image
+      # 📦 Push images
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/textmoderator-api:latest
