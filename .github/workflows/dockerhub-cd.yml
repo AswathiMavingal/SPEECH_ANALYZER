@@ -1,0 +1,34 @@
+name: CI-CD DockerHub
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 🧪 Install deps
+      - name: Install Python deps
+        run: |
+          pip install -r requirements.txt
+
+      # 🧪 Run tests
+      - name: Run tests
+        run: pytest
+
+      # 🐳 Login to DockerHub
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # 🏗 Build image
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/textmoderator-api:latest .
+
+      # 📦 Push image
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/textmoderator-api:latest
