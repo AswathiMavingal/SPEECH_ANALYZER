@@ -3,9 +3,6 @@ name: CI-CD DockerHub
 on:
   push:
     branches: [main]
-  pull_request:  # Add this to trigger checks on PRs
-    branches: [main]
-
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -18,9 +15,13 @@ jobs:
       - name: Install Python deps
         run: |
           pip install -r requirements.txt
+          pip install pytest
 
       # 🧪 Run tests
       - name: Run tests
+        env:
+          MODEL: "ollama/llama3"
+          OLLAMA_URL: "http://localhost:11434"
         run: pytest
 
       # 🐳 Login to DockerHub
